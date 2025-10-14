@@ -13,7 +13,7 @@ export async function signupValidation(req, res) {
     const JoiSchema = Joi.object({
         name: Joi.string().max(100).required(),
         email: Joi.string().trim().email().required(),
-        password: Joi.string().min(6).max(20).required()
+        password: Joi.string().min(6).required()
     })
     const { error } = JoiSchema.validate(req.body)
 
@@ -33,10 +33,38 @@ export async function signupValidation(req, res) {
         await user.save()
         res.status(201).json({ message: "signup successful", success: true })
 
+    } catch (err) {
+        return res.status(500).json({ message: 'Registration failed. Please try again.', err })
+    }
+
+}
+
+export async function loginValidation(req, res){
+    let { email, password } = req.body
+    if( !email || !password ){
+        return res.status(400).json({message: "All fields are required"})
+    }
+
+    const JoiSchema = Joi.object({
+        email: Joi.string().trim().email().required(),
+        password: Joi.string().min(6).required()
+    })
+    const { error } = JoiSchema.validate(req.body)
+
+    if (error) {
+        return res.status(400).json({ message: "Bad Request", error })
+    }
+
+    try{
+        const userExists = await userModel.findOne({ email })
+        if (!userExists) {
+            return res.status(400).json({ message: 'User does not exist, Please SignUp!' });
+        }
+
+        const isPassValid = await 
 
 
     } catch (err) {
-        res.status(500).json({ message: 'Registration failed. Please try again.', err })
+        return res.status(500).json({ message: 'Login failed. Please try again.', err })
     }
-
 }
