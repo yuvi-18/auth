@@ -3,6 +3,8 @@ import cors from 'cors'
 import 'dotenv/config';
 import authRouter from './routes/auth.js';
 import connectMongo from './models/connection.js';
+import homeRouter from './routes/home.js';
+import cookieParser from 'cookie-parser';
 await connectMongo();
 
 const app = express()
@@ -10,10 +12,15 @@ const PORT = process.env.PORT
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(cors())
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true  // CRITICAL: Allows cookies // to recieve cookies from the frontend (it needs a specified origin)
+}));
+app.use(cookieParser()) // for stroing the jwt token in a cookie
 
 
 app.use('/auth', authRouter)
+app.use('/home', homeRouter)
 
 app.use((req, res) => {res.status(404).json({message: 'Endpoint not found'})})
 
