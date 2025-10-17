@@ -7,7 +7,7 @@ export async function signupValidation(req, res) {
 
     let { name, email, password } = req.body
 
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/
     const passErrMessage = {
                 'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
     }
@@ -19,7 +19,7 @@ export async function signupValidation(req, res) {
     const JoiSchema = Joi.object({
         name: Joi.string().required().max(100),
         email: Joi.string().required().trim().email().lowercase(),
-        password: Joi.string().required().min(6).pattern(passwordPattern).messages(passErrMessage)
+        password: Joi.string().required().min(6).max(20).pattern(passwordPattern).messages(passErrMessage)
     })
     const { error } = JoiSchema.validate(req.body)
 
@@ -76,7 +76,7 @@ export async function loginValidation(req, res) {
 
     const JoiSchema = Joi.object({
         email: Joi.string().trim().email().required(),
-        password: Joi.string().required().min(6).pattern(passwordPattern).messages(passErrMessage)
+        password: Joi.string().required().min(6).max(20).pattern(passwordPattern).messages(passErrMessage)
     })
     const { error } = JoiSchema.validate(req.body)
 

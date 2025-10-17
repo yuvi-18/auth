@@ -15,8 +15,6 @@ export default function Signup() {
             body: JSON.stringify({ name, email, password }),
             credentials: 'include'
         });
-
-        formData.form.reset();
     }
 
     return (

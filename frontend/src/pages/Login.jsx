@@ -9,15 +9,12 @@ export default function Login() {
             return alert('All fields are Required')
         }
 
-        const res = await fetch('http://localhost:5000/auth/signup', {
+        const res = await fetch('http://localhost:5000/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
             credentials: 'include'
         });
-
-        formData.form.reset();
-
     }
 
     return (

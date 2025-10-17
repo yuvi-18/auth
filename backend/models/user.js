@@ -4,8 +4,7 @@ const { Schema } = mongoose
 const userSchema = new Schema({
     name : {
         type: String,
-        required : true,
-        maxlength: 50
+        required : true
     },
     email : {
         type: String,
@@ -16,8 +15,7 @@ const userSchema = new Schema({
     },
     password : {
         type: String,
-        required : true,
-        minlength: 6
+        required : true
     },
 }, { timestamps: true }
 )
