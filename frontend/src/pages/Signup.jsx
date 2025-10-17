@@ -8,13 +8,6 @@ export default function Signup() {
         if (!name || !email || !password) {
             return alert('All fields are Required')
         }
-
-        const res = await fetch('http://localhost:5000/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password }),
-            credentials: 'include'
-        });
     }
 
     return (
