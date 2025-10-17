@@ -13,7 +13,7 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: 'http://localhost:5173',
   credentials: true  // CRITICAL: Allows cookies // to recieve cookies from the frontend (it needs a specified origin)
 }));
 app.use(cookieParser()) // for stroing the jwt token in a cookie

@@ -1,41 +1,65 @@
 import '../css/signup.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form"
+import { useState } from 'react';
+import axios from "axios";
 
 export default function Signup() {
 
-        const {
-            register,
-            handleSubmit,
-            watch,
-            formState: { errors },
-        } = useForm()
+    const navigate = useNavigate()
+    const [serverMsg, setServerMsg] = useState(null)
 
-        async function signup(formData) {
-            const { name, email, password } = Object.fromEntries(formData)
-            if (!name || !email || !password) {
-                return alert('All fields are Required')
-            }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm()
+
+    async function onSubmit(data) {
+        try {
+            const response = await axios.post("http://localhost:5000/auth/signup", data, { withCredentials: true })
+            setServerMsg(response.data.message)
+            navigate('/home')
+        } catch (error) {
+            setServerMsg(error.response?.data?.message || error.message || "Signup Failed")
         }
-
-        return (
-            <>
-                <h1>Signup</h1>
-                <form action={signup}>
-
-                    <label htmlFor="name">Full Name</label>
-                    <input id="name" type="text" name="name" placeholder='Name' title='Name' required />
-
-                    <label htmlFor="email">Email</label>
-                    <input id="email" type="email" name="email" placeholder='Email' title='Email' required />
-
-                    <label htmlFor="password">Password</label>
-                    <input id="password" type="password" name="password" placeholder='Password' title='Password must be 6-20 characters' required />
-
-                    <button>Submit</button>
-
-                    <p>Already exists? <Link to='/login'>Login</Link></p>
-                </form>
-            </>
-        )
     }
+
+    return (
+        <>
+            <h1>Signup</h1>
+            {serverMsg && <p>{serverMsg}</p>}
+            <form onSubmit={handleSubmit(onSubmit)} >
+
+                <label htmlFor="name">Full Name</label>
+                <input id="name" {...register("name", {
+                    required: { value: true, message: "Name is required" }
+                })} type="text" placeholder='Name' title='Name' />
+                {errors.name && <span>{errors.name.message}</span>}
+
+                <label htmlFor="email">Email</label>
+                <input id="email" {...register("email", {
+                    required: { value: true, message: "Email is required" },
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" },
+                })} type="email" placeholder='Email' title='Email' />
+                {errors.email && <span>{errors.email.message}</span>}
+
+                <label htmlFor="password">Password</label>
+                <input id="password" {...register("password", {
+                    required: { value: true, message: "Password is required" },
+                    pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/, message: "Password must include uppercase, lowercase, number, and symbol" },
+                    minLength: { value: 6, message: "Password must be at least 6 characters long" },
+                    maxLength: { value: 20, message: "Password cannot exceed 20 characters" }
+                })}
+                    type="password" placeholder='Password' title='Password must be 6-20 characters' />
+                {errors.password && <span>{errors.password.message}</span>}
+
+                <button disabled={isSubmitting}>
+                    {isSubmitting ? "Signing in..." : "Submit"}
+                </button>
+
+                <p>Already exists? <Link to='/login'>Login</Link></p>
+            </form>
+        </>
+    )
+}
