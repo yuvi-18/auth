@@ -5,6 +5,7 @@ import { useState } from 'react';
 import axios from "axios";
 
 export default function Signup() {
+    const apiUrl = import.meta.env.VITE_API_URL
 
     const navigate = useNavigate()
     const [serverMsg, setServerMsg] = useState(null)
@@ -17,7 +18,7 @@ export default function Signup() {
 
     async function onSubmit(data) {
         try {
-            const response = await axios.post("http://localhost:5000/auth/signup", data, { withCredentials: true })
+            const response = await axios.post(apiUrl, data, { withCredentials: true })
             setServerMsg(response.data.message)
             navigate('/home')
         } catch (error) {
