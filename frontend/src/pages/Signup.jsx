@@ -18,7 +18,7 @@ export default function Signup() {
 
     async function onSubmit(data) {
         try {
-            const response = await axios.post(apiUrl, data, { withCredentials: true })
+            const response = await axios.post(`${apiUrl}/auth/signup`, data, { withCredentials: true })
             setServerMsg(response.data.message)
             navigate('/home')
         } catch (error) {
