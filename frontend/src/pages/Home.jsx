@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
 
-  const apiUrl = import.meta.env.VITE_API_URL
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // to redirect if not logged in
@@ -13,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await axios.get(`http://localhost:5000/home/me`, { withCredentials: true });
+        const response = await axios.get(`${import.meta.env.VITE_API_KEY}/home/me`, { withCredentials: true });
         setUser(response.data);
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -27,7 +25,7 @@ export default function Home() {
 
   async function handleLogout() {
     try {
-      await axios.post(`http://localhost:5000/auth/logout`, {}, {
+      await axios.post(`${import.meta.env.VITE_API_KEY}/auth/logout`, {}, {
         withCredentials: true
       });
 

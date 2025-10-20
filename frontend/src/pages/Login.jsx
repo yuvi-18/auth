@@ -6,8 +6,6 @@ import { useState } from 'react'
 
 export default function Login() {
 
-    const apiUrl = import.meta.env.VITE_API_URL
-
     const navigate = useNavigate()
     const [serverMsg, setServerMsg] = useState(null)
 
@@ -20,7 +18,7 @@ export default function Login() {
 
     async function onSubmit(data) {
         try {
-            const response = await axios.post(`http://localhost:5000/auth/login`, data, { withCredentials: true })
+            const response = await axios.post(`${import.meta.env.VITE_API_KEY}/auth/login`, data, { withCredentials: true })
             setServerMsg(response.data.message)
             navigate('/home')
         } catch (error) {
