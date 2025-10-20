@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await axios.get(`${apiUrl}/home/me`, { withCredentials: true });
+        const response = await axios.get(`http://localhost:5000/home/me`, { withCredentials: true });
         setUser(response.data);
       } catch (error) {
         console.error("Error:", error.response?.data || error.message);
@@ -27,7 +27,7 @@ export default function Home() {
 
   async function handleLogout() {
     try {
-      await axios.post(`${apiUrl}/auth/logout`, {}, {
+      await axios.post(`http://localhost:5000/auth/logout`, {}, {
         withCredentials: true
       });
 

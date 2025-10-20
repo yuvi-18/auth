@@ -24,7 +24,7 @@ export async function signupValidation(req, res) {
     const { error } = JoiSchema.validate(req.body)
 
     if (error) {
-        return res.status(400).json({ message: "Bad Request", error })
+        return res.status(400).json({ message: error.details[0].message });
     }
 
     try {

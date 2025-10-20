@@ -9,12 +9,11 @@ await connectMongo();
 
 const app = express()
 const PORT = process.env.PORT
-app.set('trust proxy', 1);
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: process.env.VITE_URL,
+  origin: "http://localhost:5173",
   credentials: true  // CRITICAL: Allows cookies // to recieve cookies from the frontend (it needs a specified origin)
 }));
 app.use(cookieParser()) // for stroing the jwt token in a cookie

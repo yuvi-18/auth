@@ -20,11 +20,12 @@ export default function Login() {
 
     async function onSubmit(data) {
         try {
-            const response = await axios.post(`${apiUrl}/auth/login`, data, { withCredentials: true })
+            const response = await axios.post(`http://localhost:5000/auth/login`, data, { withCredentials: true })
             setServerMsg(response.data.message)
             navigate('/home')
         } catch (error) {
             setServerMsg(error.response?.data?.message || error.message || "Signup Failed")
+            console.log(error)
         }
     }
 
