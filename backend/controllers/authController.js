@@ -9,7 +9,7 @@ export async function signupValidation(req, res) {
 
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/
     const passErrMessage = {
-                'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+        'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
     }
 
     if (!name || !email || !password) {
@@ -44,18 +44,27 @@ export async function signupValidation(req, res) {
 
         const token = jwt.sign(payload, secret, { expiresIn })
 
-        // Store the token in an httpOnly cookie
-        res.cookie('token', token, {
-            httpOnly: true,        // can't be accessed by JS
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,         // must be true on Render (HTTPS)
+            sameSite: "None",     // allow cross-site cookie
+            path: "/",            // default path
             maxAge: 30 * 60 * 1000 // 30 min in ms
         });
 
+        //for development
+        // res.cookie('token', token, {
+        //     httpOnly: true,        // can't be accessed by JS
+        //     maxAge: 30 * 60 * 1000 // 30 min in ms
+        // });
+
+
         if (!process.env.JWT_SECRET) {
-            res.status(400).json({message: "Jwt sceret not found"})
+            res.status(400).json({ message: "Jwt sceret not found" })
             process.exit(1);
         }
 
-        res.status(201).json({ message: "signup successful", success: true})
+        res.status(201).json({ message: "signup successful", success: true })
 
     } catch (err) {
         return res.status(500).json({ message: 'Registration failed. Please try again.', err })
@@ -67,7 +76,7 @@ export async function loginValidation(req, res) {
     let { email, password } = req.body
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])/
     const passErrMessage = {
-                'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+        'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
     }
 
     if (!email || !password) {
@@ -102,8 +111,11 @@ export async function loginValidation(req, res) {
         const token = jwt.sign(payload, secret, { expiresIn })
 
         // Store the token in an httpOnly cookie
-        res.cookie('token', token, {
-            httpOnly: true,        // can't be accessed by JS
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,         // must be true on Render (HTTPS)
+            sameSite: "None",     // allow cross-site cookie
+            path: "/",            // default path
             maxAge: 30 * 60 * 1000 // 30 min in ms
         });
 
@@ -116,7 +128,7 @@ export async function loginValidation(req, res) {
         //     maxAge: 30 * 60 * 1000
         // });
 
-        res.status(201).json({ message: "Login successful", success: true})
+        res.status(201).json({ message: "Login successful", success: true })
 
     } catch (err) {
         return res.status(500).json({ message: 'Login failed. Please try again.', err })
