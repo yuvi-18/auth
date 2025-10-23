@@ -18,7 +18,9 @@ app.use(cors({
 }));
 app.use(cookieParser()) // for stroing the jwt token in a cookie
 
-
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Server is alive!");
+});
 app.use('/auth', authRouter)
 app.use('/home', homeRouter)
 
