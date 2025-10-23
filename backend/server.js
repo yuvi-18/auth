@@ -22,11 +22,10 @@ app.use(cookieParser()) // for stroing the jwt token in a cookie
 app.use('/auth', authRouter)
 app.use('/home', homeRouter)
 
-app.use((req, res) => {res.status(404).json({message: 'Endpoint not found'})})
-
 app.get("/api/health", (req, res) => {
   res.status(200).send("Server is alive!");
 });
+app.use((req, res) => {res.status(404).json({message: 'Endpoint not found'})})
 // this way this handles the async errors also 
 const server = app.listen(PORT, () => {
   console.log(`Server connected on PORT: ${PORT}`);
