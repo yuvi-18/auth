@@ -24,6 +24,9 @@ app.use('/home', homeRouter)
 
 app.use((req, res) => {res.status(404).json({message: 'Endpoint not found'})})
 
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Server is alive!");
+});
 // this way this handles the async errors also 
 const server = app.listen(PORT, () => {
   console.log(`Server connected on PORT: ${PORT}`);
